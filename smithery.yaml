@@ -1,0 +1,49 @@
+# Smithery.ai configuration for Artribune MCP Server
+# https://smithery.ai/docs/config
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      DATABASE_URL:
+        type: string
+        description: PostgreSQL connection string for Artribune database
+      VERTEX_PROJECT_ID:
+        type: string
+        description: Google Cloud project ID for Vertex AI
+      VERTEX_LOCATION:
+        type: string
+        default: europe-west4
+        description: Vertex AI location
+      VERTEX_DATASTORE_ID:
+        type: string
+        description: Vertex AI Discovery Engine datastore ID
+      GOOGLE_APPLICATION_CREDENTIALS:
+        type: string
+        description: Path to Google Cloud credentials JSON file
+    required:
+      - DATABASE_URL
+      - VERTEX_PROJECT_ID
+      - VERTEX_DATASTORE_ID
+  commandFunction: |
+    (config) => ({
+      command: "python",
+      args: ["server.py"],
+      env: {
+        DATABASE_URL: config.DATABASE_URL,
+        VERTEX_PROJECT_ID: config.VERTEX_PROJECT_ID,
+        VERTEX_LOCATION: config.VERTEX_LOCATION || "europe-west4",
+        VERTEX_DATASTORE_ID: config.VERTEX_DATASTORE_ID,
+        GOOGLE_APPLICATION_CREDENTIALS: config.GOOGLE_APPLICATION_CREDENTIALS || ""
+      }
+    })
+
+build:
+  dockerfile: Dockerfile
+
+exampleConfig:
+  DATABASE_URL: "postgresql://user:password@host:5432/scraper_artribune_com"
+  VERTEX_PROJECT_ID: "your-gcp-project"
+  VERTEX_LOCATION: "europe-west4"
+  VERTEX_DATASTORE_ID: "your-datastore-id"
