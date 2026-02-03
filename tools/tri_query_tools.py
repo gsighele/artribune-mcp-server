@@ -16,7 +16,7 @@ from neo4j import GraphDatabase
 from datetime import datetime, timedelta
 
 # Setup Gemini
-genai.configure(api_key=os.getenv('GOOGLE_AI_API_KEY', 'AIzaSyBB9OAHnbWg3qvrnz940kyhlFofuBrtQVM'))
+genai.configure(api_key=os.getenv('GOOGLE_AI_API_KEY'))
 
 class TriQueryParams(BaseModel):
     """Parametri per tri-query con controllo chunking"""
